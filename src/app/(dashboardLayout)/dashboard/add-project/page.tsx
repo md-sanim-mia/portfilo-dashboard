@@ -17,21 +17,13 @@ import {
   useForm,
 } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NMImageUploader from "@/components/ui/core/NMImageUploader";
 import ImagePreviewer from "@/components/ui/core/NMImageUploader/ImagePreviewer";
 import { Plus } from "lucide-react";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { createProject } from "@/services/project";
 
 export default function AddProductsForm() {
   const [imageFiles, setImageFiles] = useState<File[] | []>([]);
@@ -47,7 +39,10 @@ export default function AddProductsForm() {
       duration: "",
       completionDate: "",
       technologies: [""],
+      github: "",
+      live: "",
       features: [{ title: "", description: "" }],
+      challenges: [{ title: "", description: "", solution: "" }],
     },
   });
 
@@ -59,7 +54,14 @@ export default function AddProductsForm() {
     control: form.control,
     name: "features",
   });
+  const { append: appendChallenges, fields: ChallengesFields } = useFieldArray({
+    control: form.control,
+    name: "challenges",
+  });
 
+  const addChallenge = () => {
+    appendChallenges({ title: "", description: "", solution: "" });
+  };
   const addSpec = () => {
     appendSpec({ title: "", description: "" });
   };
@@ -95,13 +97,13 @@ export default function AddProductsForm() {
       formData.append("images", file);
     }
     try {
-      // const res = await createProduct(formData);
-      // if (res.success) {
-      //   toast.success(res.message);
-      //   router.push("/users/shop/products");s
-      // } else {
-      //   toast.error(res.message);
-      // }
+      const res = await createProject(formData);
+      if (res.success) {
+        toast.success(res.message);
+        router.push("/dashboard/projects");
+      } else {
+        toast.error(res.message);
+      }
     } catch (err: any) {
       console.error(err);
     }
@@ -113,7 +115,7 @@ export default function AddProductsForm() {
         <div className="flex items-center space-x-4 mb-5 ">
           {/* <Logo /> */}
 
-          <h1 className="text-xl font-bold">Add Product</h1>
+          <h1 className="text-xl font-bold">Add Project</h1>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -174,6 +176,50 @@ export default function AddProductsForm() {
                       <Input {...field} value={field.value || ""} />
                     </FormControl>
 
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="github"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Github Link </FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="live"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Live Link</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} />
+                    </FormControl>
+
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="my-5">
+              <FormField
+                control={form.control}
+                name="technologies"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel> Technologies</FormLabel>
+                    <FormControl>
+                      <Input {...field} value={field.value || ""} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -256,7 +302,72 @@ export default function AddProductsForm() {
                         <FormLabel>Feature Description {index + 1}</FormLabel>
                         <FormControl>
                           <Textarea
-                            className="h-32 resize-none"
+                            className="h-28 resize-none"
+                            {...field}
+                            value={field.value || ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ))}
+            </div>
+            <div>
+              <div className="flex justify-between items-center border-t border-b py-3 my-5">
+                <p className="text-primary font-bold text-xl">Challenges </p>
+                <Button
+                  onClick={addChallenge}
+                  variant="outline"
+                  className="size-10"
+                  type="button"
+                >
+                  <Plus className="text-primary" />
+                </Button>
+              </div>
+
+              {ChallengesFields.map((specField, index) => (
+                <div key={specField.id} className="grid grid-cols-1 gap-5 my-5">
+                  <FormField
+                    control={form.control}
+                    name={`challenges.${index}.title`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Challenge Title {index + 1}</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value || ""} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`challenges.${index}.description`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Challenge Description {index + 1}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            className="h-28 resize-none"
+                            {...field}
+                            value={field.value || ""}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`challenges.${index}.solution`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel> Challenge Solution {index + 1}</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            className="h-28 resize-none"
                             {...field}
                             value={field.value || ""}
                           />

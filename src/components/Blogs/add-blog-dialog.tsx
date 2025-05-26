@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,8 +10,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { createblog } from "@/services/blogs";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Textarea } from "../ui/textarea";
 
 export function AddBlogDialog({
   open,
@@ -24,110 +33,112 @@ export function AddBlogDialog({
   setOpen: any;
   onAdd: any;
 }) {
-  const [formData, setFormData] = useState({
-    title: "",
-    excerpt: "",
-    content: "",
-    tags: "",
-    image: "",
-  });
-
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    onAdd({
-      ...formData,
-      tags: formData.tags.split(",").map((tag) => tag.trim()),
-    });
-    setFormData({
+  const router = useRouter();
+  const form = useForm({
+    defaultValues: {
       title: "",
-      excerpt: "",
-      content: "",
-      tags: "",
+      description: "",
       image: "",
-    });
+    },
+  });
+  const {
+    formState: { isSubmitting },
+  } = form;
+  console.log(onAdd, isSubmitting);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const modifyData = { title: data?.title, description: data?.description };
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(modifyData));
+
+    formData.append("file", data?.files?.[0]);
+
+    try {
+      const res = await createblog(formData);
+      if (res.success) {
+        toast.success(res.message);
+        router.push("/dashboard/blogs");
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[525px]">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Add New Blog Post</DialogTitle>
-            <DialogDescription>
-              Create a new blog post to share your knowledge.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
-              <Input
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <DialogHeader>
+              <DialogTitle>Add New Blog Post</DialogTitle>
+              <DialogDescription>
+                Create a new blog post to share your knowledge.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Title</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ""} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="file"
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea {...field} value={field.value || ""} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="excerpt">Excerpt</Label>
-              <Textarea
-                id="excerpt"
-                name="excerpt"
-                value={formData.excerpt}
-                onChange={handleChange}
-                placeholder="A brief summary of your blog post"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="content">Content</Label>
-              <Textarea
-                id="content"
-                name="content"
-                value={formData.content}
-                onChange={handleChange}
-                className="min-h-[120px]"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="tags">Tags (comma separated)</Label>
-              <Input
-                id="tags"
-                name="tags"
-                value={formData.tags}
-                onChange={handleChange}
-                placeholder="React, Web Development, JavaScript"
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="image">Featured Image URL</Label>
-              <Input
-                id="image"
-                name="image"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Publish Post</Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Publish Post</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

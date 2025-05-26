@@ -4,20 +4,14 @@ import { useState } from "react";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
+
 import { EditSkillDialog } from "./edit-skill-dialog";
 
 export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
@@ -49,31 +43,21 @@ export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
         </div>
       </CardHeader>
       <CardContent className="p-4 pt-0">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-sm font-medium">Proficiency</span>
-          <span className="text-sm font-medium text-amber-600">
-            {skill.level}%
-          </span>
+        <div className="flex items-center gap-3">
+          <img
+            src={skill?.image}
+            alt={skill?.category}
+            className="w-12 h-12 rounded object-cover border"
+          />
+          <div>
+            <h3 className="text-sm font-semibold text-gray-800">
+              {skill.name}
+            </h3>
+            <p className="text-xs text-gray-500 break-all">{skill.category}</p>
+          </div>
         </div>
-        <Progress
-          value={skill.level}
-          className="h-2"
-          style={
-            {
-              background:
-                "linear-gradient(to right, rgb(251, 191, 36, 0.2), rgb(245, 158, 11, 0.2))",
-              "--progress-background":
-                "linear-gradient(to right, rgb(251, 191, 36), rgb(245, 158, 11))",
-            } as any
-          }
-        />
       </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <div className="text-sm text-muted-foreground">
-          {skill.yearsOfExperience}{" "}
-          {skill.yearsOfExperience === 1 ? "year" : "years"} of experience
-        </div>
-      </CardFooter>
+
       <EditSkillDialog open={open} setOpen={setOpen} skill={skill} />
     </Card>
   );

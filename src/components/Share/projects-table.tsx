@@ -29,10 +29,7 @@ export function ProjectsTable({
   onDelete: any;
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [editingProject, setEditingProject] = useState(null);
-  const [open, setOpen] = useState(false);
-
-  const filteredProjects = projects.filter(
+  const filteredProjects = projects?.filter(
     (project: any) =>
       project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -59,8 +56,8 @@ export function ProjectsTable({
           />
         </div>
         <div className="ml-auto text-sm text-muted-foreground">
-          {filteredProjects.length} project
-          {filteredProjects.length !== 1 ? "s" : ""}
+          {filteredProjects?.length} project
+          {filteredProjects?.length !== 1 ? "s" : ""}
         </div>
       </div>
       <Table>
@@ -80,8 +77,8 @@ export function ProjectsTable({
               </TableCell>
             </TableRow>
           ) : (
-            filteredProjects.map((project: any) => (
-              <TableRow key={project.id}>
+            filteredProjects?.map((project: any) => (
+              <TableRow key={project._id}>
                 <TableCell className="font-medium">
                   <div>
                     <div className="font-medium">{project.title}</div>
@@ -104,7 +101,7 @@ export function ProjectsTable({
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {new Date(project.date).toLocaleDateString()}
+                  {project?.createdAt}
                 </TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
@@ -119,7 +116,7 @@ export function ProjectsTable({
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onDelete(project.id)}>
+                      <DropdownMenuItem onClick={() => onDelete(project._id)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>

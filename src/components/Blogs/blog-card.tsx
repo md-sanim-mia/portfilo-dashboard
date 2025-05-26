@@ -7,7 +7,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -19,7 +18,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
 import { EditBlogDialog } from "./edit-blog-dialog";
 
 export function BlogCard({ blog, onDelete }: { blog: any; onDelete: any }) {
@@ -62,26 +60,11 @@ export function BlogCard({ blog, onDelete }: { blog: any; onDelete: any }) {
           </DropdownMenu>
         </div>
         <CardDescription className="line-clamp-2 mt-1">
-          {blog.excerpt}
+          {blog?.description}
         </CardDescription>
       </CardHeader>
-      <CardContent className="p-4 pt-0">
-        <div className="flex flex-wrap gap-2">
-          {blog.tags?.map((tag: any, index: any) => (
-            <Badge
-              key={index}
-              variant="secondary"
-              className="bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-900 dark:text-teal-300"
-            >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between">
-        <div className="text-sm text-muted-foreground">
-          {new Date(blog.date).toLocaleDateString()}
-        </div>
+        <div className="text-sm text-muted-foreground">{blog?.createdAt}</div>
         <Button
           variant="outline"
           size="sm"

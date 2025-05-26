@@ -31,12 +31,13 @@ export function ProjectCard({
   onDelete: any;
 }) {
   const [open, setOpen] = useState(false);
-
+  console.log(open);
+  console.log(project.images);
   return (
     <Card className="group overflow-hidden border-none shadow-md transition-all hover:shadow-lg">
       <div className="relative h-48 w-full overflow-hidden">
         <Image
-          src={project.image || "/placeholder.svg?height=192&width=384"}
+          src={project.images[0] || "/placeholder.svg?height=192&width=384"}
           alt={project.title}
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           fill
@@ -76,7 +77,7 @@ export function ProjectCard({
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="flex flex-wrap gap-2">
-          {project.technologies?.map((tech: any, index: number) => (
+          {project?.technologies?.map((tech: any, index: number) => (
             <Badge
               key={index}
               variant="secondary"
@@ -89,7 +90,7 @@ export function ProjectCard({
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between">
         <div className="text-sm text-muted-foreground">
-          {new Date(project.date).toLocaleDateString()}
+          {project?.createdAt}
         </div>
         <Button
           variant="outline"

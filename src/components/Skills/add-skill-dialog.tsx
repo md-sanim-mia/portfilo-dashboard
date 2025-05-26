@@ -1,7 +1,4 @@
 "use client";
-
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,8 +9,25 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
+import { toast } from "sonner";
+import { createskill } from "@/services/skill";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export function AddSkillDialog({
   open,
@@ -24,90 +38,124 @@ export function AddSkillDialog({
   setOpen: any;
   onAdd: any;
 }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    level: 50,
-    yearsOfExperience: 1,
-  });
-
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSliderChange = (value: any) => {
-    setFormData((prev) => ({ ...prev, level: value[0] }));
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    onAdd(formData);
-    setFormData({
+  const router = useRouter();
+  const form = useForm({
+    defaultValues: {
       name: "",
-      level: 50,
-      yearsOfExperience: 1,
-    });
+      category: "",
+      image: "",
+    },
+  });
+  const {
+    formState: { isSubmitting },
+  } = form;
+  console.log(onAdd, isSubmitting);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const modifyData = { title: data?.title, description: data?.description };
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(modifyData));
+
+    formData.append("file", data?.files?.[0]);
+
+    try {
+      const res = await createskill(formData);
+      if (res.success) {
+        toast.success(res.message);
+        router.push("/dashboard/skills");
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Add New Skill</DialogTitle>
-            <DialogDescription>
-              Add a new skill to your profile.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Skill Name</Label>
-              <Input
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="level">Proficiency Level</Label>
-                <span className="text-sm">{formData.level}%</span>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <DialogHeader>
+              <DialogTitle>Add New Skill</DialogTitle>
+              <DialogDescription>
+                Add a new skill to your profile.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ""} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <Slider
-                id="level"
-                defaultValue={[formData.level]}
-                max={100}
-                step={1}
-                onValueChange={handleSliderChange}
-              />
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel> Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="file"
+                          value={field.value || ""}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Skill Category</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Project Category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value={"Frontend"}>Frontend</SelectItem>
+                          <SelectItem value={"Backend"}>Backend</SelectItem>
+                          <SelectItem value={"Tols"}>Tols</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="yearsOfExperience">Years of Experience</Label>
-              <Input
-                id="yearsOfExperience"
-                name="yearsOfExperience"
-                type="number"
-                min={0}
-                step={0.5}
-                value={formData.yearsOfExperience}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">Add Skill</Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Add Skill</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

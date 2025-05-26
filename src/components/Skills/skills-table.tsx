@@ -20,7 +20,6 @@ import {
 import { EditSkillDialog } from "./edit-skill-dialog";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
 
 export function SkillsTable({
   skills,
@@ -33,7 +32,7 @@ export function SkillsTable({
   const [editingSkill, setEditingSkill] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const filteredSkills = skills.filter((skill: any) =>
+  const filteredSkills = skills?.filter((skill: any) =>
     skill.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -55,52 +54,39 @@ export function SkillsTable({
           />
         </div>
         <div className="ml-auto text-sm text-muted-foreground">
-          {filteredSkills.length} skill{filteredSkills.length !== 1 ? "s" : ""}
+          {filteredSkills?.length} skill{filteredSkills.length !== 1 ? "s" : ""}
         </div>
       </div>
+
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Skill</TableHead>
-            <TableHead>Proficiency</TableHead>
-            <TableHead className="hidden md:table-cell">Experience</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Image</TableHead>
+            <TableHead>Category</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
+
         <TableBody>
-          {filteredSkills.length === 0 ? (
+          {filteredSkills?.length === 0 ? (
             <TableRow>
               <TableCell colSpan={4} className="h-24 text-center">
                 No skills found.
               </TableCell>
             </TableRow>
           ) : (
-            filteredSkills.map((skill: any) => (
-              <TableRow key={skill.id}>
+            filteredSkills?.map((skill: any) => (
+              <TableRow key={skill._id}>
                 <TableCell className="font-medium">{skill.name}</TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-2">
-                    <Progress
-                      value={skill.level}
-                      className="h-2 w-full max-w-[100px]"
-                      style={
-                        {
-                          background:
-                            "linear-gradient(to right, rgb(251, 191, 36, 0.2), rgb(245, 158, 11, 0.2))",
-                          "--progress-background":
-                            "linear-gradient(to right, rgb(251, 191, 36), rgb(245, 158, 11))",
-                        } as any
-                      }
-                    />
-                    <span className="text-xs font-medium text-amber-600">
-                      {skill.level}%
-                    </span>
-                  </div>
+                  <img
+                    src={skill.image}
+                    alt={skill.name}
+                    className="w-10 h-10 rounded object-cover border"
+                  />
                 </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {skill.yearsOfExperience}{" "}
-                  {skill.yearsOfExperience === 1 ? "year" : "years"}
-                </TableCell>
+                <TableCell>{skill.category}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -114,7 +100,7 @@ export function SkillsTable({
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onDelete(skill.id)}>
+                      <DropdownMenuItem onClick={() => onDelete(skill._id)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>
@@ -126,6 +112,7 @@ export function SkillsTable({
           )}
         </TableBody>
       </Table>
+
       {editingSkill && (
         <EditSkillDialog open={open} setOpen={setOpen} skill={editingSkill} />
       )}
