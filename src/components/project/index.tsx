@@ -8,13 +8,11 @@ import { DashboardHeader } from "@/components/Share/dashboard-header";
 import { DashboardShell } from "@/components/Share/dashboard-shell";
 import { ProjectCard } from "@/components/Share/project-card";
 import { ProjectsTable } from "@/components/Share/projects-table";
-import { useRouter } from "next/navigation";
 import { deleteProject } from "@/services/project";
 import { toast } from "sonner";
+import Link from "next/link";
 
 export default function ProjectsPage({ projects }: { projects: any }) {
-  const router = useRouter();
-
   // const addProject = (project) => {
   //   setProjects([...projects, { ...project, id: Date.now().toString() }]);
   //   setOpen(false);
@@ -32,13 +30,12 @@ export default function ProjectsPage({ projects }: { projects: any }) {
         heading="Projects"
         description="Manage your portfolio projects."
       >
-        <Button
-          onClick={() => router.push("/dashboard/add-project")}
-          className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Add Project
-        </Button>
+        <Link href={"/dashboard/addproject"}>
+          <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
+            <Plus className="mr-2 h-4 w-4" />
+            Add Project
+          </Button>
+        </Link>
       </DashboardHeader>
 
       <Tabs defaultValue="grid" className="w-full">
