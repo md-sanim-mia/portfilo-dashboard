@@ -17,8 +17,12 @@ export const createskill = async (skillData: any) => {
     revalidateTag("SKIL");
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const getAllskill = async () => {
@@ -29,8 +33,12 @@ export const getAllskill = async () => {
     });
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const getSingleskill = async (id: string) => {
@@ -43,8 +51,12 @@ export const getSingleskill = async (id: string) => {
     );
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const updateskill = async (id: string, updateData: any) => {
@@ -62,8 +74,12 @@ export const updateskill = async (id: string, updateData: any) => {
     revalidateTag("SKIL");
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const deleteskill = async (id: string) => {
@@ -80,7 +96,11 @@ export const deleteskill = async (id: string) => {
     revalidateTag("SKIL");
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };

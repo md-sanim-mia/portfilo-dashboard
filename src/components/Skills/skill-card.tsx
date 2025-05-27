@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { EditSkillDialog } from "./edit-skill-dialog";
+import Image from "next/image";
 
 export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
   const [open, setOpen] = useState(false);
@@ -44,8 +45,10 @@ export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
       </CardHeader>
       <CardContent className="p-4 pt-0">
         <div className="flex items-center gap-3">
-          <img
+          <Image
             src={skill?.image}
+            height={200}
+            width={200}
             alt={skill?.category}
             className="w-12 h-12 rounded object-cover border"
           />

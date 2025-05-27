@@ -20,6 +20,7 @@ import {
 import { EditSkillDialog } from "./edit-skill-dialog";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import Image from "next/image";
 
 export function SkillsTable({
   skills,
@@ -80,8 +81,10 @@ export function SkillsTable({
               <TableRow key={skill._id}>
                 <TableCell className="font-medium">{skill.name}</TableCell>
                 <TableCell>
-                  <img
+                  <Image
                     src={skill.image}
+                    height={200}
+                    width={200}
                     alt={skill.name}
                     className="w-10 h-10 rounded object-cover border"
                   />

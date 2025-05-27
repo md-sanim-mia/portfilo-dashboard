@@ -1,5 +1,4 @@
 "use server";
-
 import { getValidToken } from "@/lib/verifyToken";
 import { revalidateTag } from "next/cache";
 
@@ -17,11 +16,16 @@ export const createblog = async (blogData: any) => {
     revalidateTag("BLOGS");
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const getAllblog = async () => {
+  console.log(process.env.NEXT_PUBLIC_BASE_API);
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/blogs`, {
       next: { tags: ["BLOGS"] },
@@ -29,8 +33,12 @@ export const getAllblog = async () => {
     });
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const getSingleblog = async (id: string) => {
@@ -40,8 +48,12 @@ export const getSingleblog = async (id: string) => {
     });
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const updateblog = async (id: string, updateData: any) => {
@@ -56,8 +68,12 @@ export const updateblog = async (id: string, updateData: any) => {
     revalidateTag("BLOGS");
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
 export const deleteblog = async (id: string) => {
@@ -71,7 +87,11 @@ export const deleteblog = async (id: string) => {
     revalidateTag("BLOGS");
     const result = await res.json();
     return result;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+      data: null,
+    };
   }
 };
