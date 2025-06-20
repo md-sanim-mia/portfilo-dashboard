@@ -20,7 +20,7 @@ import {
   FormMessage,
 } from "../ui/form";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { useRouter } from "next/router";
+
 import {
   Select,
   SelectContent,
@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useRouter } from "next/navigation";
 
 export function AddSkillDialog({
   open,

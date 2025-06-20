@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 // import { EditProjectDialog } from "./edit-project-dialog";
 // '']
 export function ProjectCard({
@@ -32,25 +33,24 @@ export function ProjectCard({
 }) {
   const [open, setOpen] = useState(false);
   console.log(open);
-  console.log(project.images);
   return (
     <Card className="group overflow-hidden border-none shadow-md transition-all hover:shadow-lg">
       <div className="relative h-48 w-full overflow-hidden">
         <Image
-          src={project.images[0] || "/placeholder.svg?height=192&width=384"}
-          alt={project.title}
+          src={project?.images[0] || "/placeholder.svg?height=192&width=384"}
+          alt={project?.title}
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           fill
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
         <div className="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity group-hover:opacity-100">
-          <h3 className="text-lg font-bold">{project.title}</h3>
+          <h3 className="text-lg font-bold">{project?.title}</h3>
         </div>
       </div>
       <CardHeader className="p-4">
         <div className="flex justify-between items-start">
           <CardTitle className="line-clamp-1 text-lg">
-            {project.title}
+            {project?.title}
           </CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -64,7 +64,7 @@ export function ProjectCard({
                 <Edit className="mr-2 h-4 w-4" />
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onDelete(project.id)}>
+              <DropdownMenuItem onClick={() => onDelete(project?._id)}>
                 <Trash className="mr-2 h-4 w-4" />
                 Delete
               </DropdownMenuItem>
@@ -72,7 +72,7 @@ export function ProjectCard({
           </DropdownMenu>
         </div>
         <CardDescription className="line-clamp-2 mt-1">
-          {project.description}
+          {project?.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4 pt-0">
@@ -98,10 +98,14 @@ export function ProjectCard({
           className="gap-1 group-hover:bg-purple-600 group-hover:text-white transition-colors"
           asChild
         >
-          <a href={project.link} target="_blank" rel="noopener noreferrer">
+          <Link
+            href={project?.link || "/"}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View
             <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          </Link>
         </Button>
       </CardFooter>
       {/* <EditProjectDialog open={open} setOpen={setOpen} project={project} /> */}

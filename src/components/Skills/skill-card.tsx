@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,17 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { EditSkillDialog } from "./edit-skill-dialog";
 import Image from "next/image";
 
 export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <Card className="border-none shadow-md transition-all hover:shadow-lg">
       <CardHeader className="p-4 pb-2">
         <div className="flex justify-between items-start">
-          <CardTitle className="text-base">{skill.name}</CardTitle>
+          <CardTitle className="text-base">{skill?.name}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -31,11 +26,11 @@ export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setOpen(true)}>
+              <DropdownMenuItem>
                 <Edit className="mr-2 h-4 w-4" />
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => onDelete(skill.id)}>
+              <DropdownMenuItem onClick={() => onDelete(skill?._id)}>
                 <Trash className="mr-2 h-4 w-4" />
                 Delete
               </DropdownMenuItem>
@@ -54,14 +49,14 @@ export function SkillCard({ skill, onDelete }: { skill: any; onDelete: any }) {
           />
           <div>
             <h3 className="text-sm font-semibold text-gray-800">
-              {skill.name}
+              {skill?.name}
             </h3>
-            <p className="text-xs text-gray-500 break-all">{skill.category}</p>
+            <p className="text-xs text-gray-500 break-all">{skill?.category}</p>
           </div>
         </div>
       </CardContent>
 
-      <EditSkillDialog open={open} setOpen={setOpen} skill={skill} />
+      {/* <EditSkillDialog open={open} setOpen={setOpen} skill={skill} /> */}
     </Card>
   );
 }

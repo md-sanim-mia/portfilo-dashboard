@@ -34,7 +34,7 @@ export function SkillsTable({
   const [open, setOpen] = useState(false);
 
   const filteredSkills = skills?.filter((skill: any) =>
-    skill.name.toLowerCase().includes(searchTerm.toLowerCase())
+    skill?.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleEdit = (skill: any) => {
@@ -78,18 +78,18 @@ export function SkillsTable({
             </TableRow>
           ) : (
             filteredSkills?.map((skill: any) => (
-              <TableRow key={skill._id}>
-                <TableCell className="font-medium">{skill.name}</TableCell>
+              <TableRow key={skill?._id}>
+                <TableCell className="font-medium">{skill?.name}</TableCell>
                 <TableCell>
                   <Image
-                    src={skill.image}
+                    src={skill?.image}
                     height={200}
                     width={200}
-                    alt={skill.name}
+                    alt={skill?.name}
                     className="w-10 h-10 rounded object-cover border"
                   />
                 </TableCell>
-                <TableCell>{skill.category}</TableCell>
+                <TableCell>{skill?.category}</TableCell>
                 <TableCell className="text-right">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -103,7 +103,7 @@ export function SkillsTable({
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onDelete(skill._id)}>
+                      <DropdownMenuItem onClick={() => onDelete(skill?._id)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>

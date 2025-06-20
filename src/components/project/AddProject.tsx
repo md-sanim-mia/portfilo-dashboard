@@ -97,6 +97,7 @@ export default function AddProductsForm() {
     }
     try {
       const res = await createProject(formData);
+      console.log(res);
       if (res.success) {
         toast.success(res.message);
         router.push("/dashboard/projects");

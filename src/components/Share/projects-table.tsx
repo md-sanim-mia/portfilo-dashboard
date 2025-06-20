@@ -31,10 +31,10 @@ export function ProjectsTable({
   const [searchTerm, setSearchTerm] = useState("");
   const filteredProjects = projects?.filter(
     (project: any) =>
-      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.technologies.some((tech: any) =>
-        tech.toLowerCase().includes(searchTerm.toLowerCase())
+      project?.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project?.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project?.technologies.some((tech: any) =>
+        tech?.toLowerCase().includes(searchTerm.toLowerCase())
       )
   );
 
@@ -70,7 +70,7 @@ export function ProjectsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredProjects.length === 0 ? (
+          {filteredProjects?.length === 0 ? (
             <TableRow>
               <TableCell colSpan={4} className="h-24 text-center">
                 No projects found.
@@ -78,18 +78,18 @@ export function ProjectsTable({
             </TableRow>
           ) : (
             filteredProjects?.map((project: any) => (
-              <TableRow key={project._id}>
+              <TableRow key={project?._id}>
                 <TableCell className="font-medium">
                   <div>
-                    <div className="font-medium">{project.title}</div>
+                    <div className="font-medium">{project?.title}</div>
                     <div className="text-sm text-muted-foreground md:hidden">
-                      {new Date(project.date).toLocaleDateString()}
+                      {project?.createdAt}
                     </div>
                   </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   <div className="flex flex-wrap gap-1">
-                    {project.technologies.map((tech: any, index: number) => (
+                    {project?.technologies?.map((tech: any, index: number) => (
                       <Badge
                         key={index}
                         variant="secondary"
@@ -116,7 +116,7 @@ export function ProjectsTable({
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => onDelete(project._id)}>
+                      <DropdownMenuItem onClick={() => onDelete(project?._id)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                       </DropdownMenuItem>

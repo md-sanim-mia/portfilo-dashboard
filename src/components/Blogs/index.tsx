@@ -6,7 +6,6 @@ import { LayoutGrid, Plus, TableIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { initialBlogs } from "@/lib/data/data";
 import { AddBlogDialog } from "@/components/Blogs/add-blog-dialog";
 import { DashboardShell } from "@/components/Share/dashboard-shell";
 import { BlogCard } from "@/components/Blogs/blog-card";
@@ -16,16 +15,7 @@ import { deleteblog } from "@/services/blogs";
 import { toast } from "sonner";
 
 export default function BlogsPage({ data }: { data: any }) {
-  const [blogs, setBlogs] = useState(initialBlogs);
   const [open, setOpen] = useState(false);
-
-  const addBlog = (blog: any) => {
-    setBlogs([
-      ...blogs,
-      { ...blog, id: Date.now().toString(), date: new Date().toISOString() },
-    ]);
-    setOpen(false);
-  };
 
   const handileClickDelete = async (id: string) => {
     const reuslt = await deleteblog(id);
@@ -72,11 +62,11 @@ export default function BlogsPage({ data }: { data: any }) {
         </TabsContent>
 
         <TabsContent value="table" className="mt-0">
-          <BlogsTable blogs={blogs} onDelete={handileClickDelete} />
+          <BlogsTable blogs={data} onDelete={handileClickDelete} />
         </TabsContent>
       </Tabs>
 
-      <AddBlogDialog open={open} setOpen={setOpen} onAdd={addBlog} />
+      <AddBlogDialog open={open} setOpen={setOpen} />
     </DashboardShell>
   );
 }

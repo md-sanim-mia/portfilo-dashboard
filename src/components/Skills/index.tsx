@@ -18,7 +18,7 @@ export default function SkillsPage({ skills }: { skills: any }) {
 
   const handileClickDelete = async (id: string) => {
     const reuslt = await deleteskill(id);
-    if (reuslt.success) {
+    if (reuslt?.success) {
       toast.success(reuslt?.message);
     }
   };
@@ -56,7 +56,7 @@ export default function SkillsPage({ skills }: { skills: any }) {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {skills?.map((skill: any) => (
               <SkillCard
-                key={skill._id}
+                key={skill?._id}
                 skill={skill}
                 onDelete={handileClickDelete}
               />

@@ -1,7 +1,7 @@
 "use server";
 
 import { getValidToken } from "@/lib/verifyToken";
-import { revalidateTag } from "next/cache";
+// import { revalidateTag } from "next/cache";
 
 export const createskill = async (skillData: any) => {
   const accessToken = await getValidToken();
@@ -14,7 +14,7 @@ export const createskill = async (skillData: any) => {
       },
       credentials: "include",
     });
-    revalidateTag("SKIL");
+    // revalidateTag("SKIL");
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -28,7 +28,7 @@ export const createskill = async (skillData: any) => {
 export const getAllskill = async () => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/skills`, {
-      next: { tags: ["SKIL"] },
+      // next: { tags: ["SKIL"] },
       method: "GET",
     });
     const result = await res.json();
@@ -71,7 +71,7 @@ export const updateskill = async (id: string, updateData: any) => {
         credentials: "include",
       }
     );
-    revalidateTag("SKIL");
+    // revalidateTag("SKIL");
     const result = await res.json();
     return result;
   } catch (error: any) {
@@ -93,7 +93,7 @@ export const deleteskill = async (id: string) => {
         credentials: "include",
       }
     );
-    revalidateTag("SKIL");
+    // revalidateTag("SKIL");
     const result = await res.json();
     return result;
   } catch (error: any) {

@@ -5,7 +5,7 @@ import { revalidateTag } from "next/cache";
 
 export const createProject = async (projectData: any) => {
   const accessToken = await getValidToken();
-  console.log(process.env.NEXT_PUBLIC_BASE_API);
+
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/projects`, {
       method: "POST",
@@ -15,14 +15,14 @@ export const createProject = async (projectData: any) => {
       },
       credentials: "include",
     });
-    // revalidateTag("PROJECT");
+    revalidateTag("PROJECT");
 
     const result = await res.json();
     return result;
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || "Unknown error",
+      error: error?.message || "Unknown error",
       data: null,
     };
   }
@@ -38,7 +38,7 @@ export const getAllProject = async () => {
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || "Unknown error",
+      error: error?.message || "Unknown error",
       data: null,
     };
   }
@@ -56,7 +56,7 @@ export const getSingleProject = async (id: string) => {
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || "Unknown error",
+      error: error?.message || "Unknown error",
       data: null,
     };
   }
@@ -79,7 +79,7 @@ export const updateProject = async (id: string, updateData: any) => {
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || "Unknown error",
+      error: error?.message || "Unknown error",
       data: null,
     };
   }
@@ -101,7 +101,7 @@ export const deleteProject = async (id: string) => {
   } catch (error: any) {
     return {
       success: false,
-      error: error.message || "Unknown error",
+      error: error?.message || "Unknown error",
       data: null,
     };
   }

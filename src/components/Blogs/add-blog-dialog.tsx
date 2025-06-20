@@ -24,15 +24,7 @@ import {
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
 
-export function AddBlogDialog({
-  open,
-  setOpen,
-  onAdd,
-}: {
-  open: any;
-  setOpen: any;
-  onAdd: any;
-}) {
+export function AddBlogDialog({ open, setOpen }: { open: any; setOpen: any }) {
   const router = useRouter();
   const form = useForm({
     defaultValues: {
@@ -44,7 +36,7 @@ export function AddBlogDialog({
   const {
     formState: { isSubmitting },
   } = form;
-  console.log(onAdd, isSubmitting);
+  console.log(isSubmitting);
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const modifyData = { title: data?.title, description: data?.description };
     const formData = new FormData();

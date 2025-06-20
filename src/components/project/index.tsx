@@ -20,7 +20,7 @@ export default function ProjectsPage({ projects }: { projects: any }) {
 
   const handileClickDelete = async (id: string) => {
     const reuslt = await deleteProject(id);
-    if (reuslt.success) {
+    if (reuslt?.success) {
       toast.success(reuslt?.message);
     }
   };
@@ -30,7 +30,7 @@ export default function ProjectsPage({ projects }: { projects: any }) {
         heading="Projects"
         description="Manage your portfolio projects."
       >
-        <Link href={"/dashboard/addproject"}>
+        <Link href={"/dashboard/add-project"}>
           <Button className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700">
             <Plus className="mr-2 h-4 w-4" />
             Add Project

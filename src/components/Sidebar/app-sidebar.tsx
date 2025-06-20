@@ -96,7 +96,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton size="lg">
               <div className="flex items-center justify-center"></div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <h2 className="font-bold text-xl">Sanim Mia</h2>
